@@ -1,23 +1,10 @@
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Scanner;
-
 import org.json.JSONObject;
 
-public class MainApp {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Podaj nazwę miasta: ");
+public class MainApp implements Runnable{
 
-        String cityName = scanner.nextLine();
-
-        try {
-            String response = new HttpService().connect(Config.APP_URL + "?q=" + cityName + "&appid=" + Config.APP_ID);
-            parseJson(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static void parseJson(String json) {
         double temp;
@@ -44,6 +31,21 @@ public class MainApp {
 
         } else {
             System.out.println("Error");
+        }
+    }
+
+    @Override
+    public void run() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Podaj nazwę miasta: ");
+
+        String cityName = scanner.nextLine();
+
+        try {
+            String response = new HttpService().connect(Config.APP_URL + "?q=" + cityName + "&appid=" + Config.APP_ID);
+            parseJson(response);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
