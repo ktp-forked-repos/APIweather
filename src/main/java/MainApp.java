@@ -16,7 +16,7 @@ public class MainApp implements Runnable {
         int humidity;
         int pressure;
         int clouds;
-        int visibility;
+        //int visibility;
 
         JSONObject rootObject = new JSONObject(json);
         if (rootObject.getInt("cod") == 200) {
@@ -41,7 +41,7 @@ public class MainApp implements Runnable {
             clouds = cloudsObject.getInt("all");
 
             System.out.println("Temperatura: " + df.format(temp) + " \u00b0C");
-            System.out.println("Temperatura maksymalna: " + df.format(temp_max) + " \u00b0C");
+            System.out.println("Temperatura maksymalna: " + df.format(temp_max - 273) + " \u00b0C");
             System.out.println("Temperatura średnia: " + df.format(temp_day) + " \u00b0C");
             System.out.println("Wilgotność: " + humidity + " %");
             System.out.println("Zachmurzenie: " + clouds + "%");
@@ -62,7 +62,8 @@ public class MainApp implements Runnable {
         System.out.println("Wciśnij 2, aby podać id miasta");
         System.out.println("Wciśnij 3, aby podać kod pocztowy");
         System.out.println("Wciśnij 4, aby podać koordynaty miasta");
-        System.out.println("Wciśnij 5, aby zakończyć");
+        System.out.println();
+        System.out.println("Wciśnij 0, aby zakończyć");
         int liczba = scanner.nextInt();
 
         switch (liczba) {
@@ -86,7 +87,6 @@ public class MainApp implements Runnable {
                 break;
 
 
-
             case 2:
                 System.out.println("Podaj id miasta");
                 Scanner scannerID = new Scanner(System.in);
@@ -102,7 +102,8 @@ public class MainApp implements Runnable {
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                }break;
+                }
+                break;
 
             case 3:
 
@@ -125,7 +126,8 @@ public class MainApp implements Runnable {
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                }break;
+                }
+                break;
 
 
             case 4:
@@ -145,9 +147,15 @@ public class MainApp implements Runnable {
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                }break;
+                }
+                break;
 
-            case 5:
+            case 0:
+                break;
+
+            default:
+                System.out.println("Wprowadzono niepoprawne dane");
+                run();
                 break;
         }
     }
