@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Scanner;
-
 import org.json.JSONObject;
 
 public class MainApp implements Runnable {
@@ -62,6 +61,7 @@ public class MainApp implements Runnable {
         System.out.println("Wciśnij 2, aby podać id miasta");
         System.out.println("Wciśnij 3, aby podać kod pocztowy");
         System.out.println("Wciśnij 4, aby podać koordynaty miasta");
+        System.out.println("Wciśnij 5, aby zobaczyć prognozę kilkudniową dla miasta");
         System.out.println();
         System.out.println("Wciśnij 0, aby zakończyć");
         int liczba = scanner.nextInt();
@@ -150,6 +150,30 @@ public class MainApp implements Runnable {
                 }
                 break;
 
+            case 5:
+            System.out.println("Podaj nazwę miasta ");
+            Scanner scannerMiastaWielodniowe = new Scanner(System.in);
+            String cityNameWielodniowe = scannerMiastaWielodniowe.nextLine();
+            System.out.println("Podaj kod Państwa ");
+            Scanner scannerPanstwoWielodniowe = new Scanner(System.in);
+            String panstwoWielodniowe = scannerPanstwoWielodniowe.nextLine();
+
+            try {
+                String response = new HttpService().connect(Config.APP_URL_FORECAST + "?q=" + cityNameWielodniowe + ","+ panstwoWielodniowe +  "&appid=" + Config.APP_ID);
+                parseJson(response);
+                System.out.println();
+                System.out.println();
+                System.out.println();
+                run();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            break;
+
+
+
             case 0:
                 break;
 
@@ -159,4 +183,5 @@ public class MainApp implements Runnable {
                 break;
         }
     }
+
 }
