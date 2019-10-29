@@ -20,7 +20,6 @@ public class MainApp implements Runnable {
 
         JSONObject rootObject = new JSONObject(json);
         if (rootObject.getInt("cod") == 200) {
-            System.out.println(json);
 
             JSONObject mainObject = rootObject.getJSONObject("main");
             DecimalFormat df = new DecimalFormat("#.##");
@@ -28,11 +27,11 @@ public class MainApp implements Runnable {
             temp = mainObject.getDouble("temp");
             temp_max = mainObject.getDouble("temp_max");
             temp_min = mainObject.getDouble("temp_min");
-            temp_day = (((temp_min - 273) + (temp_max -273)) / 2);
+            temp_day = (((temp_min - 273) + (temp_max - 273)) / 2);
             temp = temp - 273;
 
             humidity = mainObject.getInt("humidity");
-            visibility = rootObject.getInt("visibility");
+            //visibility = rootObject.getInt("visibility");
 
             JSONObject windObject = rootObject.getJSONObject("wind");
             windSpeed = windObject.getDouble("speed");
@@ -49,7 +48,7 @@ public class MainApp implements Runnable {
             System.out.println("Ciśnienie: " + pressure + " hPa");
             System.out.println("Prędkość wiatru: " + windSpeed + " km/h");
             System.out.println("Ciśnienie: " + pressure + " hPa");
-            System.out.println("Widoczność: " + visibility);
+            //System.out.println("Widoczność: " + visibility);
 
         } else {
             System.out.println("Error");
@@ -59,15 +58,97 @@ public class MainApp implements Runnable {
     @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Podaj nazwę miasta: ");
+        System.out.println("Wciśnij 1, aby podać nazwę miasta");
+        System.out.println("Wciśnij 2, aby podać id miasta");
+        System.out.println("Wciśnij 3, aby podać kod pocztowy");
+        System.out.println("Wciśnij 4, aby podać koordynaty miasta");
+        System.out.println("Wciśnij 5, aby zakończyć");
+        int liczba = scanner.nextInt();
 
-        String cityName = scanner.nextLine();
+        switch (liczba) {
 
-        try {
-            String response = new HttpService().connect(Config.APP_URL + "?q=" + cityName + "&appid=" + Config.APP_ID);
-            parseJson(response);
-        } catch (IOException e) {
-            e.printStackTrace();
+            case 1:
+                System.out.println("Podaj nazwę miasta");
+                Scanner scannerMiasta = new Scanner(System.in);
+                String cityName = scannerMiasta.nextLine();
+                try {
+                    String response = new HttpService().connect(Config.APP_URL + "?q=" + cityName + "&appid=" + Config.APP_ID);
+                    parseJson(response);
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    run();
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+
+
+            case 2:
+                System.out.println("Podaj id miasta");
+                Scanner scannerID = new Scanner(System.in);
+                String cityID = scannerID.nextLine();
+                System.out.println(cityID);
+                try {
+                    String response = new HttpService().connect(Config.APP_URL + "?id=" + cityID + "&appid=" + Config.APP_ID);
+                    parseJson(response);
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    run();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }break;
+
+            case 3:
+
+                System.out.println("Podaj skrót państwa");
+                Scanner scannerSkrotPanstwa = new Scanner(System.in);
+                String skrotPanstwa = scannerSkrotPanstwa.nextLine();
+
+                System.out.println("Podaj kod pocztowy miasta");
+                Scanner scannerZipCode = new Scanner(System.in);
+                String cityZipCode = scannerZipCode.nextLine();
+
+
+                try {
+                    String response = new HttpService().connect(Config.APP_URL + "?zip=" + cityZipCode + "," + skrotPanstwa + "&appid=" + Config.APP_ID);
+                    parseJson(response);
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    run();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }break;
+
+
+            case 4:
+                System.out.println("Podaj długość geograficzną");
+                Scanner scannerLat = new Scanner(System.in);
+                String lat = scannerLat.nextLine();
+                Scanner scannerLon = new Scanner(System.in);
+                System.out.println("Podaj szerokość geograficzną");
+                String lon = scannerLon.nextLine();
+                try {
+                    String response = new HttpService().connect(Config.APP_URL + "?lat=" + lat + "&lon=" + lon + "&appid=" + Config.APP_ID);
+                    parseJson(response);
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    run();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }break;
+
+            case 5:
+                break;
         }
     }
 }
